@@ -42,7 +42,7 @@ final %>%
   ) + theme_minimal()
 ```
 
-Problem 1
+1
 I think the result and plot are very reasonable, as the number of people in a group increases, the probability of shared birthday rises. It reaches 0.5 at sample size 23, which is consist with the actual theory. 
 
 ```{r,message=FALSE,warning=FALSE}
@@ -99,7 +99,9 @@ est |>
     y = "Average estimate ",
   ) + theme_minimal()
 ```
-2 Our results show that when mu equals 0-3, the average rejection rate for h0 is greater than the actual average mu. This is definitely different because when mu is very small, the difficulty of rejection is higher because the fluctuation is not very obvious, so it will definitely be different from real mu. However, as mu increases, we should expect them to be equal since almost all the samples will be significant.
+
+2 Our results show that when mu equals 0-3, the average rejection rate for H0 is greater than the actual average mu. This is definitely different because when mu is very small, the difficulty of rejection is higher because the fluctuation is not very obvious, so it will definitely be different from real mu. However, as mu increases, we should expect them to be equal since almost all the samples will be significant.
+
 
 ```{r,warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -132,4 +134,14 @@ city_test = city_df |>
   unnest(tidy)
 city_test |>
   select(city_state, estimate, conf.low, conf.high)
+city_sorted = city_test |>
+  arrange(estimate) |>      
+  mutate(city_state = factor(city_state, levels = city_state))
+city_sorted |>
+  ggplot(aes(x = estimate, y = city_state)) + geom_point() +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0) +
+  labs(
+    x = "Proportion of unsolved homicides",
+    y = "City"
+  ) + theme_minimal()
 ```
