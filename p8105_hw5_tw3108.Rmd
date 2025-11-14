@@ -60,4 +60,25 @@ sim_t = function(mu, n = 30, sigma = 5) {
     select(estimate, p.value)
 }
 sim_t(mu = 0)
+sim_results_df =
+  expand_grid(
+    truemu = mu,
+    iter = 1:time
+  ) |>
+  mutate(
+    estimate_df = map(truemu, sim_t)
+  ) |>
+  unnest(estimate_df)
+power =
+  sim_results_df |>
+  group_by(truemu) |>
+  summarize(power = mean(p.value < 0.05))
+power
+power |>
+  ggplot(aes(x = truemu, y = power)) + geom_point() + geom_line() +
+  labs(
+    x = "True mean ",
+    y = "Power",
+  ) + theme_minimal()
+
 ```
