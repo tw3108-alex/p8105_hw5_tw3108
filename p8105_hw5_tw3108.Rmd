@@ -80,5 +80,23 @@ power |>
     x = "True mean ",
     y = "Power",
   ) + theme_minimal()
-
+est =
+  sim_results_df |>
+  group_by(truemu) |>
+  summarize(
+    mean = mean(estimate),                  
+    meanreject = mean(estimate[p.value < 0.05]) 
+  )
+est
+est |>
+  ggplot(aes(x = truemu)) +
+  geom_line(aes(y = mean), color = "red") +
+  geom_point(aes(y = mean), color = "red") +
+  geom_line(aes(y = meanreject),color = "blue") +
+  geom_point(aes(y = meanreject), color = "blue") +
+  labs(
+    x = "True mean",
+    y = "Average estimate ",
+  ) + theme_minimal()
 ```
+2 Our results show that when mu equals 0-3, the average rejection rate for h0 is greater than the actual average mu. This is definitely different because when mu is very small, the difficulty of rejection is higher because the fluctuation is not very obvious, so it will definitely be different from real mu. However, as mu increases, we should expect them to be equal since almost all the samples will be significant.
