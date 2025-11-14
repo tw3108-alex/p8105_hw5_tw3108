@@ -44,3 +44,20 @@ final %>%
 
 Problem 1
 I think the result and plot are very reasonable, as the number of people in a group increases, the probability of shared birthday rises. It reaches 0.5 at sample size 23, which is consist with the actual theory. 
+
+```{r,message=FALSE,warning=FALSE}
+library(tidyverse)
+library(broom)  
+set.seed(123)
+n = 30
+sigma = 5
+time = 5000
+mu = 0:6 
+sim_t = function(mu, n = 30, sigma = 5) {
+  x = rnorm(n, mean = mu, sd = sigma)
+  t = t.test(x, mu = 0)
+  tidy(t) |> 
+    select(estimate, p.value)
+}
+sim_t(mu = 0)
+```
