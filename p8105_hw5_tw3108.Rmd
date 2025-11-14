@@ -34,5 +34,13 @@ for (n in 2:50) {
   final = bind_rows(final, sim)
 }
 final
-
+final %>% 
+  ggplot(aes(x = groupsize, y = prob)) +geom_point() + geom_line() +
+  labs(
+    x = "Group size",
+    y = "Probability of shared birthday",
+  ) + theme_minimal()
 ```
+
+Problem 1
+I think the result and plot are very reasonable, as the number of people in a group increases, the probability of shared birthday rises. It reaches 0.5 at sample size 23, which is consist with the actual theory. 
