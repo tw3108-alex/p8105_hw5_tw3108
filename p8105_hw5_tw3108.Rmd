@@ -113,9 +113,23 @@ city_df =
     city_state = str_c(city, state, sep = ",")
   ) |>
   group_by(city_state) |>
-  summarize(
-    total = n(),
-    unsolved = sum(disposition %in% c("Closed without arrest", "Open/No arrest"))
+  summarize( total = n(),
+  unsolved = sum(disposition %in% c("Closed without arrest", "Open/No arrest"))
   )
 city_df
+baltimore = city_df |>
+  filter(city_state == "Baltimore,MD")
+baltimore
+prop = prop.test(baltimore$unsolved, baltimore$total)
+prop_tidy = tidy(prop)
+prop_tidy |>
+  select(estimate, conf.low, conf.high)
+city_test = city_df |>
+   mutate(
+    test_result = map2( unsolved, total,\(u, t) prop.test(u, t)),
+    tidy = map(test_result, broom::tidy)
+  ) |>
+  unnest(tidy)
+city_test |>
+  select(city_state, estimate, conf.low, conf.high)
 ```
