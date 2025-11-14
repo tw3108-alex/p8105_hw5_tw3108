@@ -100,3 +100,22 @@ est |>
   ) + theme_minimal()
 ```
 2 Our results show that when mu equals 0-3, the average rejection rate for h0 is greater than the actual average mu. This is definitely different because when mu is very small, the difficulty of rejection is higher because the fluctuation is not very obvious, so it will definitely be different from real mu. However, as mu increases, we should expect them to be equal since almost all the samples will be significant.
+
+```{r,warning=FALSE, message=FALSE}
+library(tidyverse)
+library(broom)
+library(purrr)
+homicide_df = 
+  read_csv("data/homicide-data.csv")
+city_df =
+  homicide_df |>
+  mutate(
+    city_state = str_c(city, state, sep = ",")
+  ) |>
+  group_by(city_state) |>
+  summarize(
+    total = n(),
+    unsolved = sum(disposition %in% c("Closed without arrest", "Open/No arrest"))
+  )
+city_df
+```
